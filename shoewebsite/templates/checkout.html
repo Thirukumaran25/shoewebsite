@@ -187,5 +187,24 @@
         </div>
       </div>
     </main>
-
+    <script>
+      const codCheckbox = document.querySelector('#{{ form.cash_on_delivery.id_for_label }}');
+      const cardFields = ['{{ form.card_holder_name.id_for_label }}', '{{ form.card_number.id_for_label }}', '{{ form.cvv.id_for_label }}', '{{ form.expiry_date.id_for_label }}'].map(id => document.getElementById(id));
+    
+      function toggleCardFields() {
+        if (codCheckbox.checked) {
+          cardFields.forEach(field => {
+            field.disabled = true;
+            field.value = '';
+          });
+        } else {
+          cardFields.forEach(field => {
+            field.disabled = false;
+          });
+        }
+      }
+    
+      codCheckbox.addEventListener('change', toggleCardFields);
+      toggleCardFields();
+    </script>
     {% endblock %}

@@ -1,0 +1,191 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Order Summary -->
+        <div class="bg-teal-800 text-white p-6 rounded-lg">
+          <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="bg-gray-200 rounded-lg p-2">
+              <img src="{{ product.image_url }}" alt="{{ product.name }}" class="h-20 w-20 object-contain"/>
+            </div>
+            <div>
+              <p class="font-semibold">{{ product.brand }}</p>
+              <p>{{ product.name }}</p>
+              <p>Size: 41</p>
+              <p>Quantity: 1</p>
+              <p>MRP: ₹ {{ product.price_mrp }}</p>
+            </div>
+          </div>
+          <div class="border-t border-teal-600 pt-4">
+            <div class="flex justify-between mb-2">
+              <span>Amount:</span>
+              <span>₹ {{ product.price_mrp }}</span>
+            </div>
+            <div class="flex justify-between mb-2">
+              <span>Delivery fees:</span>
+              <span>Free</span>
+            </div>
+            <div class="flex justify-between font-semibold text-lg">
+              <span>Total:</span>
+              <span>₹ {{ product.price_mrp }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h2 class="text-xl font-semibold mb-6">Complete Your Order</h2>
+          
+          <form method="post" class="space-y-6" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="mb-4 text-red-600 font-semibold">
+          {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <!-- 👤 Personal Details -->
+        <div>
+          <h3 class="font-semibold mb-3">Personal Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.first_name.id_for_label }}">First Name</label>
+              {{ form.first_name }}
+              {% if form.first_name.errors %}
+                <p class="text-red-600 text-sm">{{ form.first_name.errors|striptags }}</p>
+              {% endif %}
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.last_name.id_for_label }}">Last Name</label>
+              {{ form.last_name }}
+              {% if form.last_name.errors %}
+                <p class="text-red-600 text-sm">{{ form.last_name.errors|striptags }}</p>
+              {% endif %}
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.email.id_for_label }}">Email</label>
+              {{ form.email }}
+              {% if form.email.errors %}
+                <p class="text-red-600 text-sm">{{ form.email.errors|striptags }}</p>
+              {% endif %}
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.phone.id_for_label }}">Phone Number</label>
+              {{ form.phone }}
+              {% if form.phone.errors %}
+                <p class="text-red-600 text-sm">{{ form.phone.errors|striptags }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- 💳 Payment Details -->
+        <div>
+          <h3 class="font-semibold mb-3">Payment Details</h3>
+          <div class="flex gap-4 mb-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" class="h-8"/>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/GPay_logo.svg/200px-GPay_logo.svg.png" alt="GPay" class="h-8"/>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal" class="h-8"/>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.card_holder_name.id_for_label }}">Card Holder Name</label>
+              {{ form.card_holder_name }}
+              {% if form.card_holder_name.errors %}
+                <p class="text-red-600 text-sm">{{ form.card_holder_name.errors|striptags }}</p>
+              {% endif %}
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.card_number.id_for_label }}">Card Number</label>
+              {{ form.card_number }}
+              {% if form.card_number.errors %}
+                <p class="text-red-600 text-sm">{{ form.card_number.errors|striptags }}</p>
+              {% endif %}
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.cvv.id_for_label }}">CVV</label>
+              {{ form.cvv }}
+              {% if form.cvv.errors %}
+                <p class="text-red-600 text-sm">{{ form.cvv.errors|striptags }}</p>
+              {% endif %}
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.expiry_date.id_for_label }}">Expiration Date</label>
+              {{ form.expiry_date }}
+              {% if form.expiry_date.errors %}
+                <p class="text-red-600 text-sm">{{ form.expiry_date.errors|striptags }}</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            {{ form.cash_on_delivery }}
+            <label class="text-sm" for="{{ form.cash_on_delivery.id_for_label }}">Cash on Delivery</label>
+          </div>
+        </div>
+
+        <!-- 🏠 Shipping Address -->
+        <div>
+          <h3 class="font-semibold mb-3">Shipping Address</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-1" for="{{ form.address_line_1.id_for_label }}">Address Line 1</label>
+              {{ form.address_line_1 }}
+              {% if form.address_line_1.errors %}
+                <p class="text-red-600 text-sm">{{ form.address_line_1.errors|striptags }}</p>
+              {% endif %}
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1" for="{{ form.city.id_for_label }}">City</label>
+                {{ form.city }}
+                {% if form.city.errors %}
+                  <p class="text-red-600 text-sm">{{ form.city.errors|striptags }}</p>
+                {% endif %}
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1" for="{{ form.state.id_for_label }}">State</label>
+                {{ form.state }}
+                {% if form.state.errors %}
+                  <p class="text-red-600 text-sm">{{ form.state.errors|striptags }}</p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1" for="{{ form.landmark.id_for_label }}">Landmark</label>
+                {{ form.landmark }}
+                {% if form.landmark.errors %}
+                  <p class="text-red-600 text-sm">{{ form.landmark.errors|striptags }}</p>
+                {% endif %}
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1" for="{{ form.pincode.id_for_label }}">Pincode</label>
+                {{ form.pincode }}
+                {% if form.pincode.errors %}
+                  <p class="text-red-600 text-sm">{{ form.pincode.errors|striptags }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ Actions -->
+        <div class="flex gap-4 pt-6">
+          <a href="{% url 'cart' %}" class="flex-1 bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-md hover:bg-gray-50 text-center">
+            Cancel
+          </a>
+          <button type="submit" class="flex-1 bg-teal-800 text-white py-3 px-6 rounded-md hover:bg-teal-900">
+            Order Now
+          </button>
+        </div>
+      </form>
+        </div>
+      </div>
+    </main>
+
+    {% endblock %}

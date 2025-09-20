@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+  <div class="w-full max-w-md bg-white rounded-xl shadow-xl border p-6 sm:p-8">
+    
+    <!-- Login/Register Tabs -->
+    <div class="grid grid-cols-2 rounded-md overflow-hidden border border-slate-200 mb-6">
+      <a href="{% url 'login' %}" class="bg-slate-100 text-center py-2 font-semibold text-slate-700">Log in</a>
+      <a href="{% url 'register' %}" class="bg-teal-800 text-white text-center py-2 font-semibold">Register</a>
+    </div>
+
+    <!-- Registration Form -->
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+
+      {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ field.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="w-full rounded-md bg-teal-800 text-white font-semibold px-6 py-2 hover:bg-teal-900">Create account</button>
+    </form>
+
+    <!-- Already have account -->
+    <p class="mt-6 text-center text-sm">
+      Already have an account? 
+      <a class="text-red-600 hover:underline" href="{% url 'login' %}">Log in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

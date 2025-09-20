@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-3xl w-full border border-slate-300 rounded-xl shadow-sm text-center py-14 px-6">
+      <div class="mx-auto h-28 w-28 rounded-full bg-teal-800 text-white flex items-center justify-center relative">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-12 w-12"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-2.59a.75.75 0 1 0-1.22-.86l-3.284 4.66-1.65-1.65a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.09l3.884-5.37Z" clip-rule="evenodd"/></svg>
+        <div class="absolute inset-0 -z-10 animate-pulse">
+          <div class="absolute -top-2 -right-2 h-2 w-2 bg-teal-900 rounded-full"></div>
+          <div class="absolute -bottom-3 left-4 h-1.5 w-1.5 bg-teal-700 rounded-full"></div>
+          <div class="absolute top-3 -left-3 h-2 w-2 bg-teal-700 rounded-full"></div>
+        </div>
+      </div>
+
+      <h1 class="mt-8 text-3xl sm:text-4xl font-semibold text-slate-900">Thank you for your ordering</h1>
+      <p class="mt-4 text-slate-700 max-w-2xl mx-auto">We’ve received your order will ship in 5-7 business days. Your order number is <span class="font-semibold">#{{ order.id }}</span></p>
+
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6">
+        <a href="{% url 'order_success' order.id %}" class="border border-slate-400 text-slate-900 rounded-xl px-8 py-3 text-xl">View Order</a>
+        <a href="{% url 'order_track' order.id %}" class="bg-teal-800 text-white rounded-xl px-8 py-3 text-xl">Track Order</a>
+      </div>
+    </div>
+</div>
+{% endblock %}

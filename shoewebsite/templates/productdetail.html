@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="mx-auto max-w-6xl px-6 sm:px-8 lg:px-10 py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Product Images -->
+    <section>
+      <!-- Thumbnails -->
+      <div class="grid grid-cols-4 gap-3 mb-4">
+        {% for t in thumbs %}
+          <div class="bg-slate-100 aspect-square flex items-center justify-center rounded">
+            <img src="{{ t.url }}" alt="thumb" class="max-h-24 object-contain"/>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Main Image -->
+      <div class="bg-slate-100 aspect-[4/3] flex items-center justify-center rounded">
+        <img src="{{ p.image_url.url }}" alt="{{ p.name }}" class="max-h-96 object-contain"/>
+      </div>
+    </section>
+
+    <!-- Product Info -->
+    <section>
+      <h1 class="text-xl sm:text-2xl font-semibold">{{ p.brand }}</h1>
+      <p class="font-bold text-2xl">{{ p.name }}</p>
+      <div class="mt-2 text-md">{{ p.description }}</div>
+      <div class="mt-2">MRP ₹ {{ p.price_mrp }}</div>
+      <div class="mt-3 text-sm">Rating: {{ p.rating }}⭐</div>
+
+      <!-- Color Options -->
+      <div class="mt-4 border-b-2 py-2">
+        <span class="font-semibold">Color</span>
+        <div class="mt-2 flex gap-2">
+          {% for c in color_list %}
+            {% if c %}
+              <span class="h-5 w-5 rounded-full border inline-block" style="background: {{ c }}"></span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Shoe Size -->
+      <div class="mt-4 border-b-2 py-2">
+        <span class="font-semibold">Shoe Size</span>
+        <div class="mt-2 flex gap-2">
+          {% for s in sizes %}
+            <button class="h-8 w-8 border rounded">{{ s }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Quantity Selector -->
+      <div class="mt-4 py-4 border-b-2 items-center gap-2">
+        <span class="font-semibold">Quantity</span>
+        <div class="flex items-center gap-2 mt-2">
+          <button type="button" onclick="changeQuantity(-1)" class="h-8 w-8 bg-gray-200 rounded">−</button>
+          <input id="quantityInput" type="text" name="quantity" value="1" readonly class="w-10 h-8 text-center bg-gray-100 rounded" />
+          <button type="button" onclick="changeQuantity(1)" class="h-8 w-8 bg-gray-200 rounded">+</button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-6 flex flex-col sm:flex-row justify-center items-center gap-4">
+        <!-- Add to Cart Form -->
+        <form method="post" action="{% url 'cart' %}">
+          {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{ p.id }}">
+          <input type="hidden" name="size" value="41">
+          <input type="hidden" name="color" value="{{ p.color_list.0|default:'#000' }}">
+          <input type="hidden" name="quantity" id="hiddenQuantityInput" value="1">
+          <button type="submit" class="bg-white border border-slate-700 text-slate-800 px-6 py-2 rounded-md font-medium hover:bg-gray-100">
+            Add to Cart
+          </button>
+        </form>
+
+        <!-- Buy Now Button -->
+        <a href="{% url 'checkout' p.id %}" class="bg-slate-900 text-white px-6 py-2 rounded-md font-medium hover:bg-slate-800">
+          Buy Now
+        </a>
+      </div>
+
+      <!-- Product Highlights -->
+      <div class="mt-6 bg-gray-200 text-center p-4 rounded-2xl">
+        <p class="py-2"><span class="font-bold">COD</span> Available</p>
+        <p class="py-2"><span class="font-bold">24</span> Hours Dispatch</p>
+        <p class="py-2">7 Days <span class="font-bold">Easy Return & Replacement</span></p>
+      </div>
+
+      <!-- Product Details -->
+      <div class="mt-6 text-sm leading-6">
+        <h2 class="font-semibold">Product Details</h2>
+        <p class="mt-2">
+          {{ p.description|default:'The perfect everyday shoe made for comfort and style. Lightweight yet durable with a grippy outsole for stability.' }}
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Reviews Section -->
+  <section class="mt-10 border rounded-xl p-4">
+    <h3 class="font-semibold mb-4">Reviews</h3>
+    <div class="grid md:grid-cols-2 gap-6 text-sm">
+      <article>
+        <p class="font-semibold">Superb Looking</p>
+        <p>Very pleased with the speedy delivery and packaging. Shoes are very good quality and super comfy.</p>
+      </article>
+      <article>
+        <p class="font-semibold">Great value</p>
+        <p>Quality is excellent for the price point. Highly recommend.</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<!-- Quantity JS Logic -->
+<script>
+  function changeQuantity(change) {
+    const quantityInput = document.getElementById('quantityInput');
+    const hiddenInput = document.getElementById('hiddenQuantityInput');
+    let quantity = parseInt(quantityInput.value);
+
+    if (isNaN(quantity)) quantity = 1;
+
+    quantity += change;
+    if (quantity < 1) quantity = 1;
+
+    quantityInput.value = quantity;
+    hiddenInput.value = quantity; // update hidden input for form submission
+  }
+</script>
+
+{% endblock %}

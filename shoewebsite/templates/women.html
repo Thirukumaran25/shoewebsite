@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-8">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="font-semibold">Filters</span>
+      <form method="get" class="flex items-center gap-2">
+        <input name="q" value="{{ q|default:'' }}" placeholder="Search" class="border rounded-md px-3 py-1"/>
+        <button class="rounded-md px-3 py-1 bg-slate-900 text-white">Apply</button>
+      </form>
+    </div>
+    <form method="get">
+      <select name="sort" onchange="this.form.submit()" class="border rounded-md px-3 py-1">
+        <option value="">Sort by</option>
+        <option value="price_asc" {% if sort == "price_asc" %}selected{% endif %}>Price: Low to High</option>
+        <option value="price_desc" {% if sort == "price_desc" %}selected{% endif %}>Price: High to Low</option>
+        <option value="rating" {% if sort == "rating" %}selected{% endif %}>Rating</option>
+      </select>
+    </form>
+  </div>
+
+  <section class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {% for p in products %}
+      <article class="border hover:border-red-800 hover:shadow-md rounded-xl shadow-sm overflow-hidden">
+        <div class="bg-slate-100 aspect-[4/3] flex items-center justify-center">
+          <a href="{% url 'productdetail' p.id %}">
+            <img src="{{ p.image_url.url }}" alt="{{ p.name }}" class="max-h-60 w-96"/>
+          </a>
+        </div>
+        <div class="p-2">
+          <a href="{% url 'productdetail' p.id %}" class="text-slate-700 font-semibold hover:underline">{{ p.name }}</a>
+          <div class="mt-2 text-xs">{{ p.description }}</div>
+          <div class="mt-2 text-sm">⭐{{ p.rating }}</div>
+          <div class="mt-2 text-sm">MRP ₹ {{ p.price_mrp }}</div>
+
+          <div class="mt-2 flex items-center gap-2">
+            {% for c in p.color_list %}
+              {% if c %}
+                <span class="h-4 w-4 rounded-full border inline-block" style="background: {{ c }}"></span>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <div class="mt-4 flex gap-2">
+            <form method="post" action="{% url 'cart' %}" class="contents">
+              {% csrf_token %}
+              <input type="hidden" name="product_id" value="{{ p.id }}">
+              <input type="hidden" name="quantity" value="1">
+              <input type="hidden" name="size" value="41">
+              <input type="hidden" name="color" value="{{ p.color_list.0|default:'#000' }}">
+              <button type="submit" class="border px-4 py-1 rounded-md hover:border-red-800 hover:shadow-md">Add to Cart</button>
+            </form>
+            <a href="{% url 'checkout' p.id %}" class="bg-teal-800 text-white px-4 py-1 rounded-md hover:border-white-800 hover:shadow-md">Buy</a>
+          </div>
+        </div>
+      </article>
+    {% empty %}
+      <p>No products found.</p>
+    {% endfor %}
+  </section>
+</main>
+
+{% endblock %}

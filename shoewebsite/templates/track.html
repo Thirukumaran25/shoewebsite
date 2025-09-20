@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+   <main class="max-w-3xl mx-auto px-4 py-6">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'cart' %}" class="text-slate-700">←</a>
+        <h1 class="text-2xl font-semibold">Your Order</h1>
+        <div class="ml-auto text-sm text-slate-600">Cash on Delivery ₹ {{ order.total_amount }}</div>
+      </div>
+
+      <section class="mt-4 flex items-center gap-4">
+        <div class="h-20 w-24 rounded-lg bg-slate-100 flex items-center justify-center">
+          <img src="{{ order.product.image_url.url }}" alt="{{ order.product.name }}" class="h-16 object-contain"/>
+        </div>
+        <div class="text-sm">
+          <p class="font-semibold">{{ order.product.brand }}</p>
+          <p>{{ order.product.name }}</p>
+          <p class="text-slate-600">Exp : Delivery by sun, May 31</p>
+        </div>
+      </section>
+
+      <section class="mt-6 bg-slate-50 rounded-xl p-5">
+        {% for e in events %}
+          <div class="flex gap-4 relative">
+            <div class="flex flex-col items-center">
+              <div class="h-12 w-12 rounded-full bg-teal-800 text-white flex items-center justify-center shadow">
+                {% if e.icon == 'cart' %}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6"><path d="M2.25 3a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .728.568L5.53 5.25H20.25a.75.75 0 0 1 .73.954l-1.8 6a.75.75 0 0 1-.72.546H8.1l.27 1.5h9.63a.75.75 0 0 1 0 1.5H7.95a.75.75 0 0 1-.738-.598L5.55 4.5H3a.75.75 0 0 1-.75-.75Z"/></svg>
+                {% elif e.icon == 'home' %}
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="h-6 w-6"><path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.25 8.25a.75.75 0 1 1-1.06 1.06L12 5.56 4.28 13.15a.75.75 0 0 1-1.06-1.06l8.25-8.25Z"/><path d="M12 6.31 19.5 13.8V20a1.5 1.5 0 0 1-1.5 1.5h-3.75v-6h-4.5v6H6.75A1.5 1.5 0 0 1 5.25 20v-6.19L12 6.31Z"/></svg>
+                {% elif e.icon == 'truck' %}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6"><path d="M1.5 3.75A.75.75 0 0 1 2.25 3H13.5a.75.75 0 0 1 .75.75V15h2.318a2.25 2.25 0 1 1 0 1.5H7.432a2.25 2.25 0 1 1-3.864 0H2.25A.75.75 0 0 1 1.5 15.75V3.75Z"/><path d="M17.25 7.5H19.5l2.25 3.75V15h-1.318a2.25 2.25 0 1 0-4.364 0H14.25V8.25a.75.75 0 0 1 .75-.75h2.25Z"/></svg>
+                {% else %}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6"><path d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-2.59a.75.75 0 1 0-1.22-.86l-3.284 4.66-1.65-1.65a.75.75 0 1 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.09l3.884-5.37Z"/></svg>
+                {% endif %}
+              </div>
+              {% if not forloop.last %}
+                <div class="w-px flex-1 bg-slate-300"></div>
+              {% endif %}
+            </div>
+            <div class="pb-8">
+              <p class="text-teal-900 font-semibold">{{ e.title }}</p>
+              <p class="text-slate-700">{{ e.time }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </section>
+    </main>
+{% endblock %}

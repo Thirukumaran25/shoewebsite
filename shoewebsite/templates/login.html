@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <!-- Ensure this is at the top level of your login.html template -->
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+  <div class="w-full max-w-md bg-white rounded-xl shadow-xl border p-6 sm:p-8">
+    
+    <!-- Login/Register Tabs -->
+    <div class="grid grid-cols-2 rounded-md overflow-hidden border border-slate-200 mb-6">
+      <a href="{% url 'login' %}" class="bg-teal-800 text-white text-center py-2 font-semibold">Log in</a>
+      <a href="{% url 'register' %}" class="bg-slate-100 text-center py-2 font-semibold text-slate-700">Register</a>
+    </div>
+
+    <!-- Login Form -->
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+      <div>
+        <label class="block text-sm font-semibold mb-1">Email id</label>
+        {{ form.email }}
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label class="block text-sm font-semibold">Password</label>
+          <a href="#" class="text-xs text-red-600">Forget Password?</a>
+        </div>
+        {{ form.password }}
+      </div>
+
+      {% if form.non_field_errors %}
+        <p class="text-sm text-red-600">{{ form.non_field_errors|striptags }}</p>
+      {% endif %}
+
+      <button class="w-full rounded-md bg-teal-800 text-white font-semibold px-6 py-2">Log In</button>
+    </form>
+
+    <!-- Divider -->
+    <div class="relative my-6 text-center">
+      <span class="px-4 bg-white relative z-10">Or</span>
+      <div class="absolute inset-0 top-1/2 border-t border-slate-200 -z-0"></div>
+    </div>
+
+    <!-- Google Login -->
+    <a href="#" class="flex items-center justify-center gap-2 border border-slate-300 rounded-md py-2 hover:bg-slate-50 w-full">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" class="h-5"/>
+      <span>Continue with Google</span>
+    </a>
+
+    <!-- Register -->
+    <p class="mt-6 text-center text-sm">
+      Don’t have an account? 
+      <a class="text-red-600" href="{% url 'register' %}">Register</a>
+    </p>
+
+  </div>
+</div>
+
+
+    
+{% endblock %}

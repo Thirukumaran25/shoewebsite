@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+        {% for item in images1 %}
+            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-96 mb-4">
+        {% endfor %}
+    </div>
+    <div>
+        <h1 class='text-2xl py-10 font-semibold text-center'>Overview</h1>
+        <p class='text-lg font-semibold lg:mx-30 text-center'>"Explore our curated selection of high-quality shoes for every occasion. From durable athletic shoes designed for peak performance to stylish casual sneakers and elegant dress shoes, we offer a diverse range of footwear to suit your needs. Our user-friendly interface makes it easy to browse our collection and find the perfect pair, while detailed product description and high-quality images ensure you make an informed decision. Join our community of style and discover your next favorite shoe!"</p>
+    </div>
+    <div class=" mx-auto px-4">
+        <h1 class="text-2xl py-10 font-semibold text-center">What are you looking for?</h1>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {% for item in images2 %}
+            <div class="flex flex-col items-center bg-white rounded-lg p-4">
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-96 object-cover rounded-md mb-4">
+                <p class="text-center font-medium">{{ item.title }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class=" mx-auto px-4">
+        <h1 class="text-2xl py-10 font-semibold text-center">New & Trending</h1>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for item in images3 %}
+            <div class="flex flex-col items-center bg-white rounded-lg p-4">
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-68 object-cover shadow-xl rounded-md mb-4">
+                <p class="text-center font-medium">{{ item.title }}</p>
+                <p class="text-center font-medium">MRP:₹{{ item.title2 }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <h1 class='border mt-4 border-black text-3xl py-6 font-semibold text-center'>🎁 Get your first order with free gift 🎁 & 50 % offer</h1>
+    </div>
+{% endblock %}

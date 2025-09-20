@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="mx-auto max-w-6xl px-6 sm:px-8 lg:px-10 py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <section>
+      <!-- Thumbnails -->
+      <div class="grid grid-cols-4 gap-3 mb-4">
+        {% for t in thumbs %}
+          <div class="bg-slate-100 aspect-square flex items-center justify-center rounded">
+            <img src="{{ t.url }}" alt="thumb" class="max-h-24 object-contain"/>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Main Image -->
+      <div class="bg-slate-100 aspect-[4/3] flex items-center justify-center rounded">
+        <img src="{{ p.image_url.url }}" alt="{{ p.name }}" class="max-h-96 object-contain"/>
+      </div>
+    </section>
+
+    <section>
+      <h1 class="text-xl sm:text-2xl font-semibold">{{ p.brand }}</h1>
+      <p class="text-slate-700">{{ p.name }}</p>
+      <div class="mt-2">MRP ₹ {{ p.price_mrp }}</div>
+      <div class="mt-3 text-sm">Rating: {{ p.rating }} ★</div>
+
+      <!-- Color Options -->
+      <div class="mt-4">
+        <span class="font-semibold">Color</span>
+        <div class="mt-2 flex gap-2">
+          {% for c in color_list %}
+            {% if c %}
+              <span class="h-5 w-5 rounded-full border inline-block" style="background: {{ c }}"></span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Shoe Size -->
+      <div class="mt-4">
+        <span class="font-semibold">Shoe Size</span>
+        <div class="mt-2 flex gap-2">
+          {% for s in sizes %}
+            <button class="h-8 w-8 border rounded">{{ s }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="mt-4 flex items-center gap-2">
+        <span class="font-semibold">Quantity</span>
+        <div class="flex items-center gap-2">
+          <button class="h-8 w-8 border rounded">-</button>
+          <span>1</span>
+          <button class="h-8 w-8 border rounded">+</button>
+        </div>
+      </div>
+
+      <!-- Add to Cart & Buy Now -->
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <form method="post" action="{% url 'cart' %}" class="contents">
+              {% csrf_token %}
+              <input type="hidden" name="product_id" value="{{ p.id }}">
+              <input type="hidden" name="quantity" value="1">
+              <input type="hidden" name="size" value="41">
+              <input type="hidden" name="color" value="{{ p.color_list.0|default:'#000' }}">
+              <button type="submit" class="border px-4 py-1 rounded-md">Add to Cart</button>
+            </form>
+        <a href="{% url 'checkout' p.id %}" class="bg-slate-900 text-white rounded-md py-2 text-center">Buy Now</a>
+      </div>
+
+      <!-- Product Description -->
+      <div class="mt-6 text-sm leading-6">
+        <h2 class="font-semibold">Product Details</h2>
+        <p class="mt-2">
+          {{ p.description|default:'The perfect everyday shoe made for comfort and style. Lightweight yet durable with a grippy outsole for stability.' }}
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Reviews Section -->
+  <section class="mt-10 border rounded-xl p-4">
+    <h3 class="font-semibold mb-4">Reviews</h3>
+    <div class="grid md:grid-cols-2 gap-6 text-sm">
+      <article>
+        <p class="font-semibold">Superb Looking</p>
+        <p>Very pleased with the speedy delivery and packaging. Shoes are very good quality and super comfy.</p>
+      </article>
+      <article>
+        <p class="font-semibold">Great value</p>
+        <p>Quality is excellent for the price point. Highly recommend.</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+    
+{% endblock %}
